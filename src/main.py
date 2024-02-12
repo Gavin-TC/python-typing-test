@@ -31,25 +31,41 @@ def get_quote() -> str:
 
 
 def get_accuracy(input, original) -> int:
-    max_chars = len(original)
-    final_string = ""
-    for x in range(len(input)-1):
-        if original[x] == input[x]:
-            final_string += input[x]
-
-    return int((len(final_string) / max_chars) * 100)
+    correct_chars = ""
+    if len(input) >= len(original):
+        for x in range(len(original)):
+            if original[x] == input[x]:
+                correct_chars += input[x]
+    elif len(input) < len(original):
+        for x in range(len(input)):
+            if original[x] == input[x]:
+                correct_chars += input[x]
+    if not len(correct_chars) == 0 and not len(input) == 0:
+        return int((len(correct_chars) / len(input)) * 100)
+    else:
+        return 0
 
 
 def get_missed_chars(input, original) -> int:
     final_string = ""
-    for x in range(len(input)-1):
-        if original[x] != input[x]:
-            final_string += input[x]
+
+    if len(input) >= len(original):
+        for x in range(len(original)):
+            if input[x] != original[x]:
+                final_string += input[x]
+    elif len(input) < len(original):
+        for x in range(len(input)):
+            if input[x] != original[x]:
+                final_string += input[x]
     return final_string
 
 
 def get_wpm(elapsed_time, input, original, missed_chars, accuracy) -> int:
-    return int((len(input) / 5 - len(missed_chars)) / (elapsed_time / 60))
+    if len(input) > 0:
+        total_chars_typed = len(input) if len(input) <= len(original) else len(original)
+        return max(int((total_chars_typed / 5 - len(missed_chars)) / (elapsed_time / 60)), 0)
+    else:
+        return -1
 
 
 if __name__ == "__main__":
