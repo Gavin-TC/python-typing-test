@@ -6,7 +6,7 @@ def main() -> None:
         print("Press [ENTER] when you're ready or [Q] to quit.")
         answer: str = input()
 
-        if input().lower == 'q':
+        if answer.lower() == 'q':
             break
 
         start = time.time()
