@@ -32,6 +32,7 @@ def get_quote() -> str:
 
 def get_accuracy(input, original) -> int:
     correct_chars = ""
+    
     if len(input) >= len(original):
         for x in range(len(original)):
             if original[x] == input[x]:
