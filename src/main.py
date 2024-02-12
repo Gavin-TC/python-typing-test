@@ -1,28 +1,55 @@
 import time
-import quote_manager
+import random
 
 def main() -> None:
     while 1: 
-        print("\nPress [ENTER] when you're ready or [Q] to quit.")
+        print("Press [ENTER] when you're ready or [Q] to quit.")
         answer: str = input()
 
-        if answer.lower() == 'q':
+        if input().lower == 'q':
             break
 
         start = time.time()
 
-        quote: str = quote_manager.get_quote()
+        quote: str = get_quote()
         print(quote)
         user_quote: str = input("")
 
         elapsed = time.time() - start
         
-        accuracy: int = quote_manager.get_accuracy(user_quote, quote)
-        missed_chars: int = quote_manager.get_missed_chars(user_quote, quote)
-        wpm: int = quote_manager.get_wpm(elapsed, quote, user_quote, missed_chars, accuracy)
+        accuracy: int = get_accuracy(user_quote, quote)
+        missed_chars: int = get_missed_chars(user_quote, quote)
+        wpm: int = get_wpm(elapsed, quote, user_quote, missed_chars, accuracy)
 
         print("\nAccuracy: " + str(accuracy) + "%")
         print("WPM: ", wpm)
+
+
+def get_quote() -> str:
+    quotes = list(open("quotes.txt", 'r'))
+    return quotes[random.randint(0, len(quotes)-1)].strip('\n')
+
+
+def get_accuracy(input, original) -> int:
+    max_chars = len(original)
+    final_string = ""
+    for x in range(len(input)-1):
+        if original[x] == input[x]:
+            final_string += input[x]
+
+    return int((len(final_string) / max_chars) * 100)
+
+
+def get_missed_chars(input, original) -> int:
+    final_string = ""
+    for x in range(len(input)-1):
+        if original[x] != input[x]:
+            final_string += input[x]
+    return final_string
+
+
+def get_wpm(elapsed_time, input, original, missed_chars, accuracy) -> int:
+    return int((len(input) / 5 - len(missed_chars)) / (elapsed_time / 60))
 
 
 if __name__ == "__main__":
